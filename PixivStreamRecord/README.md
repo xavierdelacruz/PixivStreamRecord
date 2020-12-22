@@ -1,4 +1,4 @@
-Requires Python3
+Requires Python3.8
 
 Setup
 ```
