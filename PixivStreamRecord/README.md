@@ -12,12 +12,12 @@ $ update and upgrade your current Distro
 
 # First time only
 $ python3 -m venv venv
-$ source venv/bin/activate                 # MacOS, Linux
+$ source venv/bin/activate                 # MacOS, Linux (Do not use the Windows subsystem)
 $ venv\Scripts\activate.bat                # on Windows
 $ pip install -r requirements.txt          # install deps
 
 # Any other time
-$ source venv/bin/activate                 # MacOS, Linux
+$ source venv/bin/activate                 # MacOS, Linux (Do not use the Windows subsystem)
 $ venv\Scripts\activate.bat                # Windows
 $ python AnlyStreamUrl.py <id> <poll_time> # to run
 
