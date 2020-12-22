@@ -1,0 +1,31 @@
+# PixivStreamRecord
+An Python3 script to record Pixiv live stream
+
+Credit to kanami1990 for this project.
+
+Requires Python3.8
+
+Setup
+```
+
+# Windows-Users
+$ wsl --list                               # List all installed builds in Windows
+$ Choose a Distro on the Microsft Store
+$ Open whichever distro you installed (i.e. type Ubuntu if you installed it)
+$ Terminal will open, and it will prompt you for a password and user (root user priv)
+$ update and upgrade your current Distro
+
+# First time only
+$ python3 -m venv venv
+$ source venv/bin/activate                 # MacOS, Linux
+$ venv\Scripts\activate.bat                # on Windows
+$ pip install -r requirements.txt          # install deps
+
+# Any other time
+$ source venv/bin/activate                 # MacOS, Linux
+$ venv\Scripts\activate.bat                # Windows
+$ python AnlyStreamUrl.py <id> <poll_time> # to run
+
+The `<id>` is part of the pixiv URL, e.g.: `https://sketch.pixiv.net/@<id>/lives/`
+The `<poll_time>` is the time in seconds to poll if the stream is live
+
