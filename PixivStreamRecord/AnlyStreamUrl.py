@@ -62,7 +62,7 @@ if __name__ == "__main__":
     processNum = len(processInfo)
     print('processNum = %s'%processNum)
     if processNum==0:
-        if not os.path.exists('output/')
+        if not os.path.exists('output/'):
             target_dir = 'output/'
             os.mkdir(target_dir)
         os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
