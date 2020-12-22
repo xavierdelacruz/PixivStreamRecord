@@ -64,7 +64,7 @@ if __name__ == "__main__":
     if processNum==0:
         target_dir = 'output/'
         if not os.path.exists('output/'):
-            os.mkdir(target_dir)     
+            os.mkdir(target_dir)
         os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
         print('Stream start Recording')
         while(1):
