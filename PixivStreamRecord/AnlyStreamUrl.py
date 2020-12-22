@@ -62,8 +62,9 @@ if __name__ == "__main__":
     processNum = len(processInfo)
     print('processNum = %s'%processNum)
     if processNum==0:
-        target_dir = 'output/'
-        os.mkdir(target_dir)
+        if not os.path.exists('output/')
+            target_dir = 'output/'
+            os.mkdir(target_dir)
         os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
         print('Stream start Recording')
         while(1):
@@ -80,7 +81,7 @@ if __name__ == "__main__":
                     print('pid = %s , Stream record is dead' %pid)
                     os.kill(int(pid),signal.SIGKILL)
                 # mkv to mp4 to fix time scroll
-                os.system('/usr/bin/ffmpeg -i /Raspi/%s.mkv -c copy /Raspi/%s.mp4'%(fileName,fileName))
+                # os.system('/usr/bin/ffmpeg -i /Raspi/%s.mkv -c copy /Raspi/%s.mp4'%(fileName,fileName))
                 sys.exit(0)
     else:
         print('Stream is Recording')
