@@ -52,7 +52,7 @@ if __name__ == "__main__":
         highResUrl, live_id = getHighResUrl(userid)
         if live_id:
             break
-        print(f'Live is not start, sleeping for {sleep_seconds} seconds')
+        print(f'Live has not started, sleeping for {sleep_seconds} seconds')
         time.sleep(sleep_seconds)
 
     print('URL = %s , live_id = %s'%(highResUrl,live_id))
