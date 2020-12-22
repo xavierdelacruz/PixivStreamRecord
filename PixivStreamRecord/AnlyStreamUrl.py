@@ -15,10 +15,11 @@ def getStreamUrl(id):
     soup = BeautifulSoup(r.data.decode('utf-8'), "lxml")
     x = soup.find(id='state').string
     x = x[x.find('=') + 1:]
-    y = json.loads(x)
+    x = x.split('\n')[0].rstrip(';').replace('undefined', 'null')
+    y = json.loads(x)['dehydrated']
     # find liveId
-    params = y['context']['dispatcher']['stores']['RouteStore']['currentNavigate']['route']['params']
-    if 'live_id' in params.keys():
+    params = y['context']['dispatcher']['stores']['RouteStore']['navigation']['params']
+    if 'live_id' in params:
         live_id = params['live_id']
         m3u8Url = y['context']['dispatcher']['stores']['LiveStore']['lives'][live_id]['owner']['hls_movie']
         return m3u8Url,live_id
@@ -27,13 +28,13 @@ def getStreamUrl(id):
 
 def getHighResUrl(id):
     baseUrl,live_id = getStreamUrl(id)
+    # This is a huge mess lolololol
     if baseUrl:
-        highResUrl = baseUrl.replace('index.m3u8','4000000_1920x1080/index.m3u8')
         http = urllib3.PoolManager()
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-        resCode = http.request('GET',highResUrl)
+        resCode = http.request('GET', baseUrl)
         if resCode.status == 200:
-            return highResUrl,live_id
+            return baseUrl, live_id
         else:
             return False,False
     else:
@@ -41,11 +42,19 @@ def getHighResUrl(id):
 
 if __name__ == "__main__":
     userid = sys.argv[1]
+    sleep_seconds = int(sys.argv[2])
     dateTime = time.strftime('%y%m%d%H%M',time.localtime(time.time()))
     highResUrl, live_id = getHighResUrl(userid)
-    if not live_id:
-        print('Live is not start')
-        sys.exit(1)
+
+    highResUrl = None
+    live_id = None
+    while not live_id:
+        highResUrl, live_id = getHighResUrl(userid)
+        if live_id:
+            break
+        print(f'Live is not start, sleeping for {sleep_seconds} seconds')
+        time.sleep(sleep_seconds)
+
     print('URL = %s , live_id = %s'%(highResUrl,live_id))
     fileName = 'PixivStream-%s-%s-%s' %(userid,dateTime,live_id)
     print('logFileName = %s.log , steramFileName = %s.mkv'%(fileName,fileName))
@@ -53,7 +62,9 @@ if __name__ == "__main__":
     processNum = len(processInfo)
     print('processNum = %s'%processNum)
     if processNum==0:
-        os.system('nohup /usr/bin/ffmpeg -i %s -c copy /Raspi/%s.mkv >/Raspi/%s.log 2>&1 &'%(highResUrl,fileName,fileName))
+        target_dir = 'output/'
+        os.mkdir(target_dir)
+        os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
         print('Stream start Recording')
         while(1):
             time.sleep(300)
