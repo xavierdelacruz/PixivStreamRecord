@@ -51,7 +51,7 @@ if __name__ == "__main__":
     filenum = 0
     useStreamlink = False
     while(1):
-        dateTime = time.strftime('%y%m%d%H%M',time.localtime(time.time()))
+        dateTime = time.strftime('%y%m%d%H%M%S',time.localtime(time.time()))
         highResUrl = None
         live_id = None
         while not live_id:
