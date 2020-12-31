@@ -68,12 +68,12 @@ if __name__ == "__main__":
         os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
         print('Stream start Recording')
         while(1):
-            time.sleep(300)
+            time.sleep(10)
             http = urllib3.PoolManager()
             urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
             resCode = http.request('GET', highResUrl)
             if resCode.status == 200:
-                print('resCode = %s , Stream is still alive'%resCode.status)
+                print('resCode = %s , Stream is still alive from %s'%(resCode.status,userid))
                 continue
             else:
                 processPids = os.popen("ps -ef |grep %s |grep -v grep|awk '{print $2}'" %live_id).readlines()
