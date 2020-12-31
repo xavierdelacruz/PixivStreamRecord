@@ -70,7 +70,7 @@ if __name__ == "__main__":
             os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
             print('Stream start Recording')
             while(1):
-                time.sleep(10)
+                time.sleep(60)
                 http = urllib3.PoolManager()
                 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
                 resCode = http.request('GET', highResUrl)
