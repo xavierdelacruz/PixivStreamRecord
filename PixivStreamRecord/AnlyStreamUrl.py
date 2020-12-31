@@ -46,42 +46,42 @@ if __name__ == "__main__":
     dateTime = time.strftime('%y%m%d%H%M',time.localtime(time.time()))
     highResUrl, live_id = getHighResUrl(userid)
 
-    highResUrl = None
-    live_id = None
-    while not live_id:
-        highResUrl, live_id = getHighResUrl(userid)
-        if live_id:
-            break
-        print(f'Live has not started, sleeping for {sleep_seconds} seconds')
-        time.sleep(sleep_seconds)
-
-    print('URL = %s , live_id = %s'%(highResUrl,live_id))
-    fileName = 'PixivStream-%s-%s-%s' %(userid,dateTime,live_id)
-    print('logFileName = %s.log , steramFileName = %s.mkv'%(fileName,fileName))
-    processInfo = os.popen('ps -ef |grep %s |grep -v grep'%live_id).readlines()
-    processNum = len(processInfo)
-    print('processNum = %s'%processNum)
-    if processNum==0:
-        target_dir = 'output/'
-        if not os.path.exists('output/'):
-            os.mkdir(target_dir)
-        os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
-        print('Stream start Recording')
-        while(1):
-            time.sleep(10)
-            http = urllib3.PoolManager()
-            urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
-            resCode = http.request('GET', highResUrl)
-            if resCode.status == 200:
-                print('resCode = %s , Stream is still alive from %s'%(resCode.status,userid))
-                continue
-            else:
-                processPids = os.popen("ps -ef |grep %s |grep -v grep|awk '{print $2}'" %live_id).readlines()
-                for pid in processPids:
-                    print('pid = %s , Stream record is dead' %pid)
-                    os.kill(int(pid),signal.SIGKILL)
-                # mkv to mp4 to fix time scroll
-                # os.system('/usr/bin/ffmpeg -i /Raspi/%s.mkv -c copy /Raspi/%s.mp4'%(fileName,fileName))
-                sys.exit(0)
-    else:
-        print('Stream is Recording')
+    filenum = 0
+    while(1):
+        highResUrl = None
+        live_id = None
+        while not live_id:
+            highResUrl, live_id = getHighResUrl(userid)
+            if live_id:
+                break
+            print(f'Live has not started, sleeping for {sleep_seconds} seconds')
+            time.sleep(sleep_seconds)
+        filenum += 1
+        print('URL = %s , live_id = %s'%(highResUrl,live_id))
+        fileName = 'PixivStream-%s-%s-%s-%s' %(userid,dateTime,live_id,filenum)
+        print('logFileName = %s.log , streamFileName = %s.mkv'%(fileName,fileName))
+        processInfo = os.popen('ps -ef |grep %s |grep -v grep'%live_id).readlines()
+        processNum = len(processInfo)
+        print('processNum = %s'%processNum)
+        if processNum==0:
+            target_dir = 'output/'
+            if not os.path.exists('output/'):
+                os.mkdir(target_dir)
+            os.system(f'nohup /usr/bin/ffmpeg -i {highResUrl} -c copy {target_dir}{fileName}.mkv >{target_dir}{fileName}.log 2>&1 &')
+            print('Stream start Recording')
+            while(1):
+                time.sleep(10)
+                http = urllib3.PoolManager()
+                urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+                resCode = http.request('GET', highResUrl)
+                if resCode.status == 200:
+                    print('resCode = %s , Stream is still alive from %s'%(resCode.status,userid))
+                    continue
+                else:
+                    processPids = os.popen("ps -ef |grep %s |grep -v grep|awk '{print $2}'" %live_id).readlines()
+                    for pid in processPids:
+                        print('pid = %s , Stream record is dead' %pid)
+                        os.kill(int(pid),signal.SIGKILL)
+                    break
+        else:
+            print('Stream is Recording')

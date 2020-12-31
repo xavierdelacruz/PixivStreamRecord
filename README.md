@@ -21,13 +21,13 @@ $ update and upgrade your current Distro
 $ python3 -m venv venv                     # Do not use with the Windows Linux Subsystem
 $ source venv/bin/activate                 # MacOS, Linux (Do not use the Windows Linux Subsystem)
 $ venv\Scripts\activate.bat                # on Windows
-$ pip install -r requirements.txt          # install deps
+$ pip3 install -r requirements.txt         # Install dependencies
 
 # Any other time
 ```
 $ source venv/bin/activate                 # MacOS, Linux (Do not use the Windows subsystem)
 $ venv\Scripts\activate.bat                # on Windows
-$ python AnlyStreamUrl.py <id> <poll_time> # to run
+$ python3 AnlyStreamUrl.py <id> <poll_time> # to run
 
 The `<id>` is part of the pixiv URL, e.g.: `https://sketch.pixiv.net/@<id>/lives/`
 The `<poll_time>` is the time in seconds to poll if the stream is live
