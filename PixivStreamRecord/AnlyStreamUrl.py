@@ -42,10 +42,10 @@ def getHighResUrl(id):
         return False,False
 
 if __name__ == "__main__":
-    userid = sys.argv[1]  
+    sleep_seconds = int(sys.argv[1])
     sessionid = sys.argv[2]
     devicetoken = sys.argv[3]
-    sleep_seconds = int(sys.argv[4])
+    userid = sys.argv[4] 
     highResUrl, live_id = getHighResUrl(userid)
 
     filenum = 0
