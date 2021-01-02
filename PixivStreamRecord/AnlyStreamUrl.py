@@ -49,7 +49,7 @@ if __name__ == "__main__":
     highResUrl, live_id = getHighResUrl(userid)
 
     filenum = 0
-    useStreamlink = False
+    useStreamlink = True
     while(1):
         dateTime = time.strftime('%y%m%d%H%M%S',time.localtime(time.time()))
         highResUrl = None
